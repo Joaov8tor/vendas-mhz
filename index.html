@@ -1,156 +1,72 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>CLH Hub — MH Script Brookhaven</title>
-  <style>
-    :root{--bg:#0f1724;--card:#0b1220;--accent:#06b6d4;--muted:#94a3b8;--glass: rgba(255,255,255,0.03)}
-    *{box-sizing:border-box}
-    body{margin:0;font-family:Inter,Segoe UI,Roboto,Arial;background:linear-gradient(180deg,#071027 0%,var(--bg) 100%);color:#e6eef6}
-    header{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;background:linear-gradient(90deg, rgba(255,255,255,0.02), transparent);backdrop-filter: blur(6px)}
-    .brand{display:flex;gap:12px;align-items:center}
-    .logo{width:44px;height:44px;border-radius:10px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:700;color:#032}
-    h1{margin:0;font-size:18px}
-    nav{display:flex;gap:12px}
-    a.btn{background:var(--glass);padding:8px 12px;border-radius:8px;color:var(--muted);text-decoration:none;font-size:14px}
-    main{padding:22px;max-width:1000px;margin:28px auto}
-    .product{display:grid;grid-template-columns:1fr 360px;gap:20px}
-    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:16px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
-    .price{font-weight:800;color:var(--accent);font-size:20px}
-    .muted{color:var(--muted);font-size:14px}
-    .actions{display:flex;gap:10px;margin-top:14px}
-    button{cursor:pointer;padding:10px 14px;border-radius:8px;border:0}
-    .primary{background:var(--accent);color:#032}
-    .ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)}
-    .discord-preview{margin-top:12px}
-    footer{margin-top:32px;text-align:center;color:var(--muted);font-size:13px}
-
-    /* Modal */
-    .modal-backdrop{position:fixed;inset:0;background:rgba(2,6,23,0.6);display:none;align-items:center;justify-content:center;z-index:1000}
-    .modal{background:var(--card);padding:18px;border-radius:12px;max-width:520px;width:92%;box-shadow:0 12px 30px rgba(2,6,23,0.6)}
-    .modal h3{margin:0 0 8px 0}
-    .modal p{margin:0 0 12px 0;color:var(--muted)}
-    .modal .note{background:rgba(255,255,255,0.02);padding:10px;border-radius:8px;font-size:13px;color:var(--muted);margin-bottom:10px}
-    .close-x{position:absolute;right:18px;top:18px;background:transparent;border:0;color:var(--muted);font-size:18px}
-
-    @media(max-width:880px){.product{grid-template-columns:1fr;}.discord-preview{order:2}}
-  </style>
+<meta charset="UTF-8">
+<title>UMP 24/7</title>
+<style>
+    body {
+        margin: 0;
+        background: #000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    #player {
+        width: 90%;
+        height: 70vh;
+        border: none;
+    }
+</style>
 </head>
 <body>
-  <header>
-    <div class="brand">
-      <div class="logo">CLH</div>
-      <div>
-        <h1>CLH Hub — Loja de Scripts</h1>
-        <div class="muted">Venda: <strong>MH Script — Brookhaven</strong></div>
-      </div>
-    </div>
-    <nav>
-      <a class="btn" href="#produto">Produto</a>
-      <a class="btn" href="#discord">Servidor de Vendas</a>
-    </nav>
-  </header>
 
-  <main>
-    <section id="produto" class="product">
-      <div class="card">
-        <h2>MH Script — Brookhaven</h2>
-        <p class="muted">Script completo com várias funcionalidades para Brookhaven. Compatível com executores comuns. Não inclui key; entrega via servidor Discord de vendas.</p>
+<div id="player"></div>
 
-        <div style="margin-top:12px">
-          <div class="price">200 Robux <span class="muted" style="font-weight:600;font-size:13px">(via Gamepass)</span></div>
-          <div class="muted" style="margin-top:6px">Observação: a compra e entrega são realizadas através do servidor do Discord de vendas. Você será direcionado para o servidor após confirmar.</div>
-        </div>
+<script>
+    // Lista de vídeos (IDs)
+    const videos = [
+        "JxGoXuJZN_o",
+        "srTPqA9_H4I",
+        "Zg7ozaeQzTA",
+        "rFEdYR9vaJU",
+        "4hkwJJAJYDw",
+        "8cVAuHN3VHg"
+    ];
 
-        <div class="actions">
-          <button class="primary" id="btnBuy">Comprar — Ir ao Discord</button>
-          <button class="ghost" id="btnPreview">Visualizar servidor</button>
-        </div>
+    let index = 0;
+    let player;
 
-        <div class="card" style="margin-top:14px">
-          <h4>Detalhes</h4>
-          <ul class="muted">
-            <li>Preço: 200 Robux (Gamepass)</li>
-            <li>Entrega: via Discord (canal privado após confirmação)</li>
-            <li>Versão com key: <strong>Não disponível</strong></li>
-          </ul>
-        </div>
-      </div>
+    // CARREGA A API DO YOUTUBE AUTOMATICAMENTE
+    const tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    document.body.appendChild(tag);
 
-      <aside class="card" id="discord" style="height:100%">
-        <h3>Prévia do servidor de vendas</h3>
-        <div class="discord-preview">
-          <!-- Widget fornecido pelo usuário -->
-          <iframe src="https://discord.com/widget?id=1421278597750063176&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
-        </div>
-        <div class="muted" style="margin-top:10px;font-size:13px">Importante: quando estiver pronto, substitua o atributo <code>href</code> do botão "Ir para o servidor" no modal pelo invite do seu servidor Discord.</div>
-      </aside>
-    </section>
+    // CRIA O PLAYER
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player("player", {
+            videoId: videos[index],
+            playerVars: {
+                autoplay: 1,
+                controls: 1,
+                modestbranding: 1,
+                rel: 0
+            },
+            events: {
+                onStateChange: onPlayerStateChange
+            }
+        });
+    }
 
-    <footer>
-      CLH Hub • © 2025 — Venda de scripts. Use com responsabilidade.
-    </footer>
-  </main>
+    // QUANDO O VÍDEO TERMINA → VAI PRO PRÓXIMO
+    function onPlayerStateChange(event) {
+        if (event.data === YT.PlayerState.ENDED) {
+            index++;
+            if (index >= videos.length) index = 0;
+            player.loadVideoById(videos[index]);
+        }
+    }
+</script>
 
-  <!-- Modal: aviso de compra -->
-  <div class="modal-backdrop" id="modal">
-    <div class="modal">
-      <button class="close-x" id="modalClose">✕</button>
-      <h3>Atenção — Compra via Robux/Gamepass</h3>
-      <div class="note">Você está prestes a ser direcionado ao servidor do Discord de vendas. A compra deste script é feita em <strong>Robux</strong> através de um Gamepass. O site não processa pagamento em reais.</div>
-      <p class="muted">Passos:</p>
-      <ol class="muted">
-        <li>Você será redirecionado para o servidor do Discord de vendas.</li>
-        <li>No Discord haverá instruções para completar a compra (link do gamepass / comprovação / role).</li>
-        <li>Após confirmação no Discord, você terá acesso ao canal de downloads.</li>
-      </ol>
-      <div style="display:flex;gap:10px;margin-top:12px;justify-content:flex-end">
-        <button class="ghost" id="cancelBuy">Cancelar</button>
-        <!-- Replace the href below with your real invite link when you have it -->
-        <a id="goToDiscord" class="primary" href="#" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center">Entrar no servidor</a>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    // Modal logic
-    const modal = document.getElementById('modal');
-    const btnBuy = document.getElementById('btnBuy');
-    const btnPreview = document.getElementById('btnPreview');
-    const modalClose = document.getElementById('modalClose');
-    const cancelBuy = document.getElementById('cancelBuy');
-    const goToDiscord = document.getElementById('goToDiscord');
-
-    // IMPORTANT: replace this with your actual Discord invite when ready
-    const DISCORD_INVITE = ''; // ex: 'https://discord.gg/abc123'
-
-    btnBuy.addEventListener('click', ()=>{
-      // show modal with warning
-      modal.style.display = 'flex';
-      // if you already have an invite, set the goToDiscord href
-      if(DISCORD_INVITE) goToDiscord.href = DISCORD_INVITE; else goToDiscord.href = 'javascript:void(0)';
-    });
-
-    btnPreview.addEventListener('click', ()=>{
-      // scroll to the discord widget preview
-      document.getElementById('discord').scrollIntoView({behavior:'smooth'});
-    });
-
-    modalClose.addEventListener('click', ()=>{ modal.style.display='none'; });
-    cancelBuy.addEventListener('click', ()=>{ modal.style.display='none'; });
-
-    // If the user clicks the Entrar no servidor button without invite, open the widget in a new tab as fallback
-    goToDiscord.addEventListener('click', (e)=>{
-      if(!DISCORD_INVITE){
-        e.preventDefault();
-        // Open a new tab with the Discord server's widget page (fallback) - user can copy the invite from there if available
-        window.open('https://discord.com/channels/1421278597750063176', '_blank');
-      }
-    });
-
-    // Accessibility: close modal on ESC
-    window.addEventListener('keydown', (e)=>{ if(e.key==='Escape') modal.style.display='none'; });
-  </script>
 </body>
 </html>
